@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Lloguer de cotxes</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/app.js"></script>
+</head>
+
+<body>
+
+  <div class="ui attached stackable menu inverted">
+    <div class="ui container">
+      <a id="llistatCotxes" class="item">Llistat de cotxes</a>
+      <a id="altaCotxe" class="item">Alta cotxe</a>
+      <a id="nouModel" class="item">Nou model</a>
+      <a id="baixaModel" class="item">Baixa model</a>
+    </div>
+  </div>
+  <div class="ui container main">
+    <!--Llistat de cotxes-->
+    <div id="vistaLlistatCotxes" class="ui raised segment">
+      <div class="ui four cards">
+        <!--model-->
+        <div class="ui card">
+          <div class="content">
+            <a class="right floated meta">
+              <i class="remove icon"></i>Remove
+            </a>
+            <span class="header">E-1234-BCD</span>
+            <div class="meta">
+              <b>Model:</b><span>TESLA</span>
+            </div>
+          </div>
+          <div class="image">
+            <img src="https://tctechcrunch2011.files.wordpress.com/2015/08/tesla_model_s.jpg?w=738">
+          </div>
+          <div class="content">
+            <span>CALENDAR.</span>
+          </div>
+        </div>
+        <!--model-->
+      </div>
+    </div>
+    <!--Final Llistat de cotxes-->
+
+    <!--Alta cotxe-->
+    <form id="formNouCotxe" class="ui form">
+      <h4 class="ui dividing header">Nou Cotxe</h4>
+      <div class="field">
+        <label>Matricula:</label>
+        <input type="text" placeholder="E-1234-BCD">
+      </div>
+      <div class="field">
+        <label>Model:</label>
+        <select>
+          <option value="tesla">tesla</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="ui checkbox">
+          <input type="checkbox" tabindex="0">
+          <label>Voleu afegir una serie de vehicles?</label>
+        </div>
+      </div>
+      <div class="field hidden">
+        <label>Num. Vehicles:</label>
+        <input type="number" value="2" min="2" step="1" max="20">
+      </div>
+      <button class="ui button" type="submit">Afegir</button>
+    </form>
+    <!--Final Alta cotxe-->
+
+    <!--Nou model-->
+    <!--Final Nou model-->
+
+    <!--Baixa model-->
+    <!--Final Baixa model-->
+
+  </div>
+
+
+</body>
+
+</html>
