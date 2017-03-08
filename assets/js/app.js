@@ -6,8 +6,14 @@ class Cotxe {
   }
 
   getNode() {
-    const string = `<div class="ui card"><div class="content"><a class="right floated meta"><i class="remove icon"></i>Remove</a><span class="header">${this.matricula}</span><div class="meta"><b>Model:</b><span>TESLA</span></div></div><div ="image"><img src="${this.model.image}"></div><div class="content"><span>CALENDAR.</span></div></div>`
+    const string = `<div class="ui card"><div class="content"><a class="right floated meta"><i class="remove icon"></i>Remove</a><span class="header">${this.matricula}</span><div class="meta"><b>Model:</b><span>${this.model.nom}</span></div></div><div class="image"><img src="${this.model.image}"></div><div class="content"><span>CALENDAR.</span></div></div>`
     let body = new DOMParser().parseFromString(string, 'text/html');
+    let icon = body.querySelector('.right.floated.meta')
+    icon.addEventListener('click', () => {
+      this.node.remove();
+      let index = cotxes.findIndex(c => c.matricula == this.matricula);
+      cotxes.splice(index, 1);
+    })
     return body.querySelector('div');
   };
 }
@@ -50,7 +56,13 @@ function bindings() {
   btnLlistatCotxes.addEventListener('click', (e) => {
     e.preventDefault(); // No expandeix l'event. No recarga la pàgina
     amagaVistes();
-    vistaLlistatCotxes.classList.remove('hidden')
+    vistaLlistatCotxes.classList.remove('hidden');
+
+    const board = document.querySelector('.ui.four.cards');
+    board.innerHTML = '';
+    const nodes = cotxes.map(c => board.appendChild(c.node));
+    // Mostrar mensaje correcto o redirigir vista.
+
   })
 
   btnAltaCotxe.addEventListener('click', (e) => {
