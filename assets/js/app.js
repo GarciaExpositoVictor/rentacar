@@ -61,7 +61,7 @@ function bindings() {
     let nodes = generarNodesOpcions();
     let select = vistaAltaCotxe.querySelector('select');
     select.innerHTML = '';
-    select.appendChild(...nodes);
+    nodes.forEach(n => select.appendChild(n))
   })
 
   btnNouModel.addEventListener('click', (e) => {
@@ -94,6 +94,10 @@ function bindings() {
 
     if (serieVehicles) {
       // Multiples cotxes
+      // max. 20 cotxes > 20 || no negativos -> 1
+      // generarMatricula(matricula) +1 
+      // for(x) -> new car ^^
+
     } else {
       let objModel = models.find(m => m.nom === model)
       cotxes.push(new Cotxe(matricula, objModel))
