@@ -6,15 +6,31 @@ class Cotxe {
   }
 
   getNode() {
-    const string = `<div class="ui card"><div class="content"><a class="right floated meta"><i class="remove icon"></i>Remove</a><span class="header">${this.matricula}</span><div class="meta"><b>Model:</b><span>${this.model.nom}</span></div></div><div class="image"><img src="${this.model.image}"></div><div class="content"><span>CALENDAR.</span></div></div>`
+    let string = '';
+    string += `<div class="ui card">`;
+    string += `<div class="content">`;
+    string += `<a class="right floated meta">`
+    string += `<i class="remove icon"></i>Remove`
+    string += `</a>`;
+    string += `<span class="header">${this.matricula}</span>`;
+    string += `<div class="meta">`
+    string += `<b>Model:</b><span>${this.model.nom}</span>`
+    string += `</div>`
+    string += `</div>`
+    string += `<div class="image"><img src="${this.model.image}"></div>`
+    string += `<div class="content">`
+    string += `<span>CALENDAR.</span>`
+    string += `</div>`
+    string += `</div>`
     let body = new DOMParser().parseFromString(string, 'text/html');
     let icon = body.querySelector('.right.floated.meta')
+    let node = body.querySelector('div');
     icon.addEventListener('click', () => {
-      this.node.remove();
+      node.remove();
       let index = cotxes.findIndex(c => c.matricula == this.matricula);
       cotxes.splice(index, 1);
     })
-    return body.querySelector('div');
+    return node
   };
 }
 
@@ -99,7 +115,7 @@ function bindings() {
     let numVehicles = vistaAltaCotxe.querySelector('input[type="number"]').value;
 
 
-    if (!checkMatricula(matricula)) {
+    if (!checkMatricula(matricula) || matriculaExisteix(matricula)) {
       field.classList.add('error')
       return;
     }
@@ -113,6 +129,7 @@ function bindings() {
     } else {
       let objModel = models.find(m => m.nom === model)
       cotxes.push(new Cotxe(matricula, objModel))
+      alert('Nou cotxe afegit: ' + matricula)
     }
 
   })
@@ -149,4 +166,9 @@ function generarNodesOpcions() {
     option.textContent = model.nom;
     return option;
   })
+}
+
+
+function matriculaExisteix(matricula) {
+  return cotxes.some(x => x.matricula === matricula)
 }
