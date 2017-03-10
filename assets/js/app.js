@@ -2,7 +2,6 @@ class Cotxe {
   constructor(matricula, model) {
     this.matricula = matricula;
     this.model = model;
-    this.node = this.getNode();
   }
 
   getNode() {
@@ -76,7 +75,7 @@ function bindings() {
 
     const board = document.querySelector('.ui.four.cards');
     board.innerHTML = '';
-    const nodes = cotxes.map(c => board.appendChild(c.node));
+    const nodes = cotxes.map(c => board.appendChild(c.getNode()));
     // Mostrar mensaje correcto o redirigir vista.
 
   })
@@ -121,10 +120,16 @@ function bindings() {
     }
 
     if (serieVehicles) {
-      // Multiples cotxes
-      // max. 20 cotxes > 20 || no negativos -> 1
-      // generarMatricula(matricula) +1 
-      // for(x) -> new car ^^
+      numVehicles = isNaN(numVehicles) ? 2 : +numVehicles; // Sino es numero, lo convertimos a 2, sino lo casteamos a number
+      numVehicles = Number.isInteger(numVehicles) ? numVehicles : Number.parseInt(numVehicles) // Es entero
+      numVehicles = numVehicles > 20 ? 20 : numVehicles; // No es mayor a 20
+      numVehicles = numVehicles < 2 ? 2 : numVehicles; // Ni menor a 2
+
+      let objModel = models.find(m => m.nom === model)
+      for(let i = 0; i < numVehicles; i++) {
+        cotxes.push(new Cotxe(generarMatricula(matricula), objModel));
+      }
+      alert('Afegit ' + numVehicles + ' cotxes nou.')
 
     } else {
       let objModel = models.find(m => m.nom === model)
@@ -171,4 +176,60 @@ function generarNodesOpcions() {
 
 function matriculaExisteix(matricula) {
   return cotxes.some(x => x.matricula === matricula)
+}
+
+function generarMatricula(matricula) {
+  let [ pais, codi, lletres] = matricula.split('-');
+  codi = +codi + 1 > 9999 ? 0000 : +codi + 1;
+  lletres = novesLletres(lletres);
+  return pais + '-' + codi + '-' + lletres
+}
+
+function novesLletres(lletres) {
+  const valides = Array.from("BCDFGHJKLMNOPQRSTVWXYZ");
+  let array = Array.from(lletres).map(x => x.toUpperCase());
+  return array.map(lletra => {
+    let index = valides.findIndex(x => x == lletra);
+    return index == valides.length ? valides[0] : valides[index+1];   
+  }).join('');
+}
+
+function generarMatricula(matricula) {
+  let [ pais, codi, lletres] = matricula.split('-');
+  lletres = +codi + 1 > '9999' ? novesLletres(lletres) : lletres;
+  codi = +codi + 1 > '9999' ? '0000' : inflarCodi(+codi + 1);
+  let nuevaMatricula = pais + '-' + codi + '-' + lletres;
+  return matriculaExisteix(nuevaMatricula) ? generarMatricula(nuevaMatricula) : nuevaMatricula;
+}
+
+function novesLletres(lletres) {
+
+  // Es el unico caso, volvemos a empezar
+  if (lletres == 'ZZZ'){
+    return 'BBB';
+  }
+  
+  const valides = Array.from("BCDFGHJKLMNOPQRSTVWXYZ");
+  let arrayLletres = Array.from(lletres).map(x => x.toUpperCase()).reverse();
+ 
+  for(let x = 0; x < arrayLletres.length - 1; x++){
+    let index = valides.findIndex(l => l == arrayLletres[x]);
+
+    if (index < valides.length - 1){
+      arrayLletres[x] = valides[index + 1]
+      return arrayLletres.reverse().join('')
+    }
+   
+  }
+}
+
+function inflarCodi(codi) {
+  codi = codi.toString()
+  let zeros = 4 - codi.length;
+  
+  for(let i = 0; i < zeros; i++) {
+    codi = '0' + codi
+  }
+  
+  return codi;
 }
