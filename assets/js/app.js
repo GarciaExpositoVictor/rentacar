@@ -71,6 +71,8 @@ function bindings() {
   btnLlistatCotxes.addEventListener('click', (e) => {
     e.preventDefault(); // No expandeix l'event. No recarga la pàgina
     amagaVistes();
+    removerActivosBotones();
+    btnLlistatCotxes.classList.add('active');
     vistaLlistatCotxes.classList.remove('hidden');
 
     const board = document.querySelector('.ui.four.cards');
@@ -90,6 +92,8 @@ function bindings() {
   btnAltaCotxe.addEventListener('click', (e) => {
     e.preventDefault(); // No expandeix l'event. No recarga la pàgina
     amagaVistes();
+    removerActivosBotones();
+    btnAltaCotxe.classList.add('active');
     vistaAltaCotxe.classList.remove('hidden')
 
     let nodes = generarNodosOpcionesModelo();
@@ -101,14 +105,18 @@ function bindings() {
   btnNouModel.addEventListener('click', (e) => {
     e.preventDefault(); // No expandeix l'event. No recarga la pàgina
     amagaVistes();
+    removerActivosBotones();
+    btnNouModel.classList.add('active');
     vistaNouModel.classList.remove('hidden');
   })
 
   btnBaixaModel.addEventListener('click', (e) => {
     e.preventDefault(); // No expandeix l'event. No recarga la pàgina
     amagaVistes();
+    removerActivosBotones();
+    btnBaixaModel.classList.add('active');
     vistaBaixaModel.classList.remove('hidden');
-    
+
     let nodes = generarNodosOpcionesModelo();
     let select = vistaBaixaModel.querySelector('select');
     select.innerHTML = '';
@@ -180,6 +188,12 @@ function bindings() {
     }
   }
 
+  function removerActivosBotones() {
+    btnLlistatCotxes.classList.remove('active') 
+    btnAltaCotxe.classList.remove('active') 
+    btnNouModel.classList.remove('active') 
+    btnBaixaModel.classList.remove('active') 
+  }
 
 }
 
