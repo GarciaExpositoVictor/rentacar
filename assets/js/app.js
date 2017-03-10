@@ -75,7 +75,14 @@ function bindings() {
 
     const board = document.querySelector('.ui.four.cards');
     board.innerHTML = '';
-    const nodes = coches.map(c => board.appendChild(c.getNode()));
+    if (coches.length) {
+      coches.forEach(c => board.appendChild(c.getNode()));
+    } else {
+      const h1 = document.createElement('h1');
+      h1.className = 'ui header';
+      h1.textContent = 'No hi ha cap cotxe registrat'
+      board.appendChild(h1)
+    }
     // Mostrar mensaje correcto o redirigir vista.
 
   })
