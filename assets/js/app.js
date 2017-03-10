@@ -26,8 +26,8 @@ class Cotxe {
     let node = body.querySelector('div');
     icon.addEventListener('click', () => {
       node.remove();
-      let index = cotxes.findIndex(c => c.matricula == this.matricula);
-      cotxes.splice(index, 1);
+      let index = coches.findIndex(c => c.matricula == this.matricula);
+      coches.splice(index, 1);
     })
     return node
   };
@@ -40,7 +40,7 @@ class Model {
   }
 }
 
-cotxes = [];
+coches = [];
 models = [
   new Model('tesla', 'https://tctechcrunch2011.files.wordpress.com/2015/08/tesla_model_s.jpg?w=738'),
   new Model('lamborghini', 'https://www.lamborghini.com/es-en/sites/es-en/files/DAM/lamborghini/share%20img/huracan-coupe-facebook-og.jpg'),
@@ -75,7 +75,7 @@ function bindings() {
 
     const board = document.querySelector('.ui.four.cards');
     board.innerHTML = '';
-    const nodes = cotxes.map(c => board.appendChild(c.getNode()));
+    const nodes = coches.map(c => board.appendChild(c.getNode()));
     // Mostrar mensaje correcto o redirigir vista.
 
   })
@@ -85,7 +85,7 @@ function bindings() {
     amagaVistes();
     vistaAltaCotxe.classList.remove('hidden')
 
-    let nodes = generarNodesOpcions();
+    let nodes = generarNodosOpcionesModelo();
     let select = vistaAltaCotxe.querySelector('select');
     select.innerHTML = '';
     nodes.forEach(n => select.appendChild(n))
@@ -114,7 +114,7 @@ function bindings() {
     let numVehicles = vistaAltaCotxe.querySelector('input[type="number"]').value;
 
 
-    if (!checkMatricula(matricula) || matriculaExisteix(matricula)) {
+    if (!checkMatricula(matricula) || existeMatricula(matricula)) {
       field.classList.add('error')
       return;
     }
@@ -127,13 +127,13 @@ function bindings() {
 
       let objModel = models.find(m => m.nom === model)
       for(let i = 0; i < numVehicles; i++) {
-        cotxes.push(new Cotxe(generarMatricula(matricula), objModel));
+        coches.push(new Cotxe(generarMatricula(matricula), objModel));
       }
-      alert('Afegit ' + numVehicles + ' cotxes nou.')
+      alert('Afegit ' + numVehicles + ' coches nou.')
 
     } else {
       let objModel = models.find(m => m.nom === model)
-      cotxes.push(new Cotxe(matricula, objModel))
+      coches.push(new Cotxe(matricula, objModel))
       alert('Nou cotxe afegit: ' + matricula)
     }
 
@@ -159,12 +159,20 @@ function bindings() {
 
 }
 
+/**
+ * Comprueba que ninguno de nuestros coches no tiene la matricula
+ * @param {string} matricula 
+ */
 function checkMatricula(matricula) {
   const reg = new RegExp(/[E]{1}\-\d{4}\-((([B-D]|[F-H]|[J-N]|[P-T]|[V-Z])){3})/g)
   return reg.test(matricula);
 }
 
-function generarNodesOpcions() {
+/**
+ * Genera nodos de opciones en base a los modelos que hay.
+ * <option value='modelo.nom'>Model.nom<option>
+ */
+function generarNodosOpcionesModelo() {
   return models.map(model => {
     const option = document.createElement('option');
     option.value = model.nom;
@@ -173,63 +181,63 @@ function generarNodesOpcions() {
   })
 }
 
-
-function matriculaExisteix(matricula) {
-  return cotxes.some(x => x.matricula === matricula)
+/**
+ * Comprueba que ningun coche tiene la misma matricula
+ * @param {string} matricula 
+ */
+function existeMatricula(matricula) {
+  return coches.some(x => x.matricula === matricula)
 }
 
+/**
+ * Generar la matricula consecuitva y comprueba que no existe.
+ * @param {string} matricula 
+ */
 function generarMatricula(matricula) {
-  let [ pais, codi, lletres] = matricula.split('-');
-  codi = +codi + 1 > 9999 ? 0000 : +codi + 1;
-  lletres = novesLletres(lletres);
-  return pais + '-' + codi + '-' + lletres
+  let [ pais, codi, letras] = matricula.split('-');
+  letras = +codi + 1 > '9999' ? nuevasLetras(letras) : letras;
+  codi = +codi + 1 > '9999' ? '0000' : rellenarZeros(+codi + 1);
+  let nuevaMatricula = pais + '-' + codi + '-' + letras;
+  return existeMatricula(nuevaMatricula) ? generarMatricula(nuevaMatricula) : nuevaMatricula;
 }
 
-function novesLletres(lletres) {
-  const valides = Array.from("BCDFGHJKLMNOPQRSTVWXYZ");
-  let array = Array.from(lletres).map(x => x.toUpperCase());
-  return array.map(lletra => {
-    let index = valides.findIndex(x => x == lletra);
-    return index == valides.length ? valides[0] : valides[index+1];   
-  }).join('');
-}
+/**
+ * Genera una nueva string de las letras de la matricula, y devuelve la consecuitva. 
+ * Si es la última, vuelve a empezar. 
+ * @param {string} letras 
+ */
+function nuevasLetras(letras) {
 
-function generarMatricula(matricula) {
-  let [ pais, codi, lletres] = matricula.split('-');
-  lletres = +codi + 1 > '9999' ? novesLletres(lletres) : lletres;
-  codi = +codi + 1 > '9999' ? '0000' : inflarCodi(+codi + 1);
-  let nuevaMatricula = pais + '-' + codi + '-' + lletres;
-  return matriculaExisteix(nuevaMatricula) ? generarMatricula(nuevaMatricula) : nuevaMatricula;
-}
-
-function novesLletres(lletres) {
-
-  // Es el unico caso, volvemos a empezar
-  if (lletres == 'ZZZ'){
+  // És el unico caso, volvemos a empezar
+  if (letras == 'ZZZ'){
     return 'BBB';
   }
   
   const valides = Array.from("BCDFGHJKLMNOPQRSTVWXYZ");
-  let arrayLletres = Array.from(lletres).map(x => x.toUpperCase()).reverse();
+  let arrayLetras = Array.from(letras).map(x => x.toUpperCase()).reverse();
  
-  for(let x = 0; x < arrayLletres.length - 1; x++){
-    let index = valides.findIndex(l => l == arrayLletres[x]);
+  for(let x = 0; x < arrayLetras.length - 1; x++){
+    let index = valides.findIndex(l => l == arrayLetras[x]);
 
     if (index < valides.length - 1){
-      arrayLletres[x] = valides[index + 1]
-      return arrayLletres.reverse().join('')
+      arrayLetras[x] = valides[index + 1]
+      return arrayLetras.reverse().join('')
     }
    
   }
 }
 
-function inflarCodi(codi) {
-  codi = codi.toString()
-  let zeros = 4 - codi.length;
+/**
+ * En base a un numero, rellenar zeros a la derecha hasta llegar a 4
+ * @param {number} codigo 
+ */
+function rellenarZeros(codigo) {
+  codigo = codigo.toString()
+  let zeros = 4 - codigo.length;
   
   for(let i = 0; i < zeros; i++) {
-    codi = '0' + codi
+    codigo = '0' + codigo
   }
   
-  return codi;
+  return codigo;
 }
