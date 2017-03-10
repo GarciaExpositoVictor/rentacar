@@ -60,8 +60,8 @@ function bindings() {
   // Vistes
   let vistaLlistatCotxes = document.querySelector('#vistaLlistatCotxes');
   let vistaAltaCotxe = document.querySelector('#formNouCotxe');
-  // let vistaNouModel = document.querySelector('#nouModel');
-  // let vistaBaixaModel = document.querySelector('#baixaModel');
+  let vistaNouModel = document.querySelector('#formNouModel');
+  let vistaBaixaModel = document.querySelector('#formEliminarModel');
 
 
   // Amagem totes les vistes al començar
@@ -93,10 +93,19 @@ function bindings() {
 
   btnNouModel.addEventListener('click', (e) => {
     e.preventDefault(); // No expandeix l'event. No recarga la pàgina
+    amagaVistes();
+    vistaNouModel.classList.remove('hidden');
   })
 
   btnBaixaModel.addEventListener('click', (e) => {
     e.preventDefault(); // No expandeix l'event. No recarga la pàgina
+    amagaVistes();
+    vistaBaixaModel.classList.remove('hidden');
+    
+    let nodes = generarNodosOpcionesModelo();
+    let select = vistaBaixaModel.querySelector('select');
+    select.innerHTML = '';
+    nodes.forEach(n => select.appendChild(n))
   })
 
 
@@ -126,7 +135,7 @@ function bindings() {
       numVehicles = numVehicles < 2 ? 2 : numVehicles; // Ni menor a 2
 
       let objModel = models.find(m => m.nom === model)
-      for(let i = 0; i < numVehicles; i++) {
+      for (let i = 0; i < numVehicles; i++) {
         coches.push(new Cotxe(generarMatricula(matricula), objModel));
       }
       alert('Afegit ' + numVehicles + ' coches nou.')
@@ -153,6 +162,14 @@ function bindings() {
 
     if (!vistaAltaCotxe.classList.contains('hidden')) {
       vistaAltaCotxe.classList.add('hidden')
+    }
+
+    if (!vistaNouModel.classList.contains('hidden')) {
+      vistaNouModel.classList.add('hidden')
+    }
+
+    if (!vistaBaixaModel.classList.contains('hidden')) {
+      vistaBaixaModel.classList.add('hidden')
     }
   }
 
@@ -194,7 +211,7 @@ function existeMatricula(matricula) {
  * @param {string} matricula 
  */
 function generarMatricula(matricula) {
-  let [ pais, codi, letras] = matricula.split('-');
+  let [pais, codi, letras] = matricula.split('-');
   letras = +codi + 1 > '9999' ? nuevasLetras(letras) : letras;
   codi = +codi + 1 > '9999' ? '0000' : rellenarZeros(+codi + 1);
   let nuevaMatricula = pais + '-' + codi + '-' + letras;
@@ -209,21 +226,21 @@ function generarMatricula(matricula) {
 function nuevasLetras(letras) {
 
   // És el unico caso, volvemos a empezar
-  if (letras == 'ZZZ'){
+  if (letras == 'ZZZ') {
     return 'BBB';
   }
-  
+
   const valides = Array.from("BCDFGHJKLMNOPQRSTVWXYZ");
   let arrayLetras = Array.from(letras).map(x => x.toUpperCase()).reverse();
- 
-  for(let x = 0; x < arrayLetras.length - 1; x++){
+
+  for (let x = 0; x < arrayLetras.length - 1; x++) {
     let index = valides.findIndex(l => l == arrayLetras[x]);
 
-    if (index < valides.length - 1){
+    if (index < valides.length - 1) {
       arrayLetras[x] = valides[index + 1]
       return arrayLetras.reverse().join('')
     }
-   
+
   }
 }
 
@@ -234,10 +251,10 @@ function nuevasLetras(letras) {
 function rellenarZeros(codigo) {
   codigo = codigo.toString()
   let zeros = 4 - codigo.length;
-  
-  for(let i = 0; i < zeros; i++) {
+
+  for (let i = 0; i < zeros; i++) {
     codigo = '0' + codigo
   }
-  
+
   return codigo;
 }

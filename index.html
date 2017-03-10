@@ -39,7 +39,6 @@
       <div class="field">
         <label>Model:</label>
         <select>
-          <option value="tesla">tesla</option>
         </select>
       </div>
       <div class="field">
@@ -52,14 +51,32 @@
         <label>Num. Vehicles:</label>
         <input type="number" value="2" min="2" step="1" max="20">
       </div>
-      <button class="ui button" type="submit">Afegir</button>
+      <button class="ui button primary" type="submit">Afegir</button>
     </form>
     <!--Final Alta cotxe-->
 
     <!--Nou model-->
+    <form id="formNouModel" class="ui form">
+      <div class="field">
+        <label>Model</label>
+        <input type="text">
+      </div>
+      <div class="field">
+        <label>Image</label>
+        <input type="url">
+      </div>
+      <button class="ui button primary" type="submit">Afegir</button>
+    </form>
     <!--Final Nou model-->
 
     <!--Baixa model-->
+    <form id="formEliminarModel" class="ui form">
+      <div class="field">
+        <label>Models disponibles</label>
+        <select></select>
+      </div>     
+      <button class="ui button negative" type="submit"><i class="trash icon"></i>Eliminar</button>
+    </form>
     <!--Final Baixa model-->
 
   </div>
