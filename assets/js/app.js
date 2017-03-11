@@ -135,7 +135,20 @@ function bindings() {
     let select = vistaBaixaModel.querySelector('select');
     select.innerHTML = '';
     nodes.forEach(n => select.appendChild(n))
+
+
+
   })
+
+    let btnEnviarBaixamodel = vistaBaixaModel.querySelector('[type="submit"');
+    btnEnviarBaixamodel.addEventListener('click', (e) => {
+        e.preventDefault();
+    let field = vistaBaixaModel.querySelector('.field');
+    //llevam s'error
+    field.classList.remove('error');
+    let modelElegit = vistaBaixaModel.querySelector('select').value;
+    eliminarModel(modelElegit);
+    })
 
 
 
@@ -309,13 +322,20 @@ function existeMatricula(matricula) {
 }
 
 function generarModel(nomModel, imatgeModel){
-    checkImatgeModel(imatgeModel);
-    checkModel(nomModel, imatgeModel);
-    if(checkModel(nomModel, imatgeModel) == false && checkImatgeModel(imatgeModel)) {
+    if(!checkModel(nomModel, imatgeModel) && checkImatgeModel(imatgeModel)) {
         models.push(new Model(nomModel.value, imatgeModel.value));
         alert("s'ha creat el model " + nomModel.value);
     }else{
         alert("ja existeix aquest model, inserta un model nou.");
         pass;
+    }
+}
+
+function eliminarModel(modelElegit) {
+    for (var i = 0; i < models.length; i++) {
+        if (models[i].nom === modelElegit) {
+            models.splice(i, 1);
+            alert("s'ha eliminat el model " + modelElegit);
+        }
     }
 }
