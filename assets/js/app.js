@@ -108,6 +108,20 @@ function bindings() {
     removerActivosBotones();
     btnNouModel.classList.add('active');
     vistaNouModel.classList.remove('hidden');
+
+    let btnEnviarAltaCotxe = vistaNouModel.querySelector('[type="submit"');
+    btnEnviarAltaCotxe.addEventListener('click', (e) => {
+        e.preventDefault(); // No expandeix l'event. No recarga la pàgina
+    let field = vistaAltaCotxe.querySelector('.field');
+    // Llevam s'error
+    field.classList.remove('error');
+
+    let nomModel = vistaNouModel.querySelector('input[type="text"');
+    let URLModel = vistaNouModel.querySelector('input[type="url"');
+    generarModel(nomModel, URLModel);
+}
+)
+
   })
 
   btnBaixaModel.addEventListener('click', (e) => {
@@ -122,6 +136,7 @@ function bindings() {
     select.innerHTML = '';
     nodes.forEach(n => select.appendChild(n))
   })
+
 
 
   // Formulari Nou Cotxe
@@ -278,4 +293,29 @@ function rellenarZeros(codigo) {
   }
 
   return codigo;
+}
+
+function checkImatgeModel(imatgeModel) {
+    const reg = new RegExp(/(https?:\/\/.*\.(?:png|jpg))/i);
+    return reg.test(imatgeModel.value);
+}
+
+function checkModel(nomModel, imatgeModel){
+    return models.some(model => model.nom.toLowerCase() === nomModel.value.toLowerCase())
+}
+
+function existeMatricula(matricula) {
+    return coches.some(x => x.matricula === matricula)
+}
+
+function generarModel(nomModel, imatgeModel){
+    checkImatgeModel(imatgeModel);
+    checkModel(nomModel, imatgeModel);
+    if(checkModel(nomModel, imatgeModel) == false && checkImatgeModel(imatgeModel)) {
+        models.push(new Model(nomModel.value, imatgeModel.value));
+        alert("s'ha creat el model " + nomModel.value);
+    }else{
+        alert("ja existeix aquest model, inserta un model nou.");
+        pass;
+    }
 }
