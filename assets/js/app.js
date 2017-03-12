@@ -420,5 +420,7 @@ function generarModel(nomModel, imatgeModel) {
 function eliminarModel(modelElegit) {
     let index = models.findIndex(model => model.nom == modelElegit);
     models.splice(index, 1);
+    let cotxeIndex = cotxes.findIndex(cotxe => cotxe.model.nom == modelElegit);
+    cotxes.splice(cotxeIndex, 1);
     alert("S'ha eliminat el model " + modelElegit);
 }
