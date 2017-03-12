@@ -332,10 +332,7 @@ function generarModel(nomModel, imatgeModel){
 }
 
 function eliminarModel(modelElegit) {
-    for (var i = 0; i < models.length; i++) {
-        if (models[i].nom === modelElegit) {
-            models.splice(i, 1);
-            alert("s'ha eliminat el model " + modelElegit);
-        }
-    }
+    let index = models.findIndex(model => model.nom == modelElegit);
+    models.splice(index, 1);
+    alert("S'ha eliminat el model " + modelElegit);
 }
